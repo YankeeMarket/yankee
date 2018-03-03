@@ -21,9 +21,9 @@ use OAuth\Common\Http\Uri\Uri;
 class DPDController extends Controller
 {
 
-    private $base_url = 'https://lt.integration.dpd.eo.pl';
-    private $username = 'testuser1';
-    private $password = 'testpassword1';
+    private $base_url = getenv('DPD_BASE', 'https://lt.integration.dpd.eo.pl');
+    private $username = getenv('DPD_USERNAME', 'testuser1');
+    private $password = getenv('DPD_PASSWORD', 'testpassword1');
 
     protected $storage;
 	private $httpClient;
