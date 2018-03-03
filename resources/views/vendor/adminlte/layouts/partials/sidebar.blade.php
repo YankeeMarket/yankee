@@ -37,6 +37,7 @@
             <li><a href="{{ url('products') }}"><i class='fa fa-shopping-bag'></i> <span>Products</span></a></li>
             <li><a href="{{ url('orders') }}"><i class='fa fa-shopping-cart'></i> <span>Orders</span></a></li>
             <li><a href="{{ url('close') }}"><i class='fa fa-clock-o'></i><i class='fa fa-close'></i> <span>Close Manifest</span></a></li>
+            <li><a href="{{ url('labels') }}"><i class='fa fa-search'></i> <span>See Available Labels</span></a></li>
             
         </ul><!-- /.sidebar-menu -->
     </section>
