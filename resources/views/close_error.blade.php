@@ -1,7 +1,7 @@
 @extends('adminlte::layouts.app')
 
 @section('htmlheader_title')
-	{{ trans('adminlte_lang::message.home') }}
+	Order Page
 @endsection
 
 
@@ -13,7 +13,7 @@
 				<!-- Default box -->
 				<div class="box">
 					<div class="box-header with-border">
-						<h3 class="box-title">BigCommerce Connection: {{$time}}</h3>
+						<h3 class="box-title">Yankee Market Close Manifest Error {{$date}}</h3>
 
 						<div class="box-tools pull-right">
 							<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -23,14 +23,7 @@
 						</div>
 					</div>
 					<div class="box-body">
-						<ul>
-							@foreach($products as $product)
-								<li>PRODUCT: {{$product->name}}
-								{{$product->weight}} kg<br>
-								{!!$product->description !!}
-								</li>
-							@endforeach
-						</ul>
+                        ERROR: {{$error}};
 					</div>
 					<!-- /.box-body -->
 				</div>

@@ -1,7 +1,7 @@
 @extends('adminlte::layouts.app')
 
 @section('htmlheader_title')
-	{{ trans('adminlte_lang::message.home') }}
+	Order Page
 @endsection
 
 
@@ -13,7 +13,7 @@
 				<!-- Default box -->
 				<div class="box">
 					<div class="box-header with-border">
-						<h3 class="box-title">BigCommerce Connection: {{$time}}</h3>
+						<h3 class="box-title">Yankee Market Order {{$order->id}}</h3>
 
 						<div class="box-tools pull-right">
 							<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -23,14 +23,23 @@
 						</div>
 					</div>
 					<div class="box-body">
-						<ul>
-							@foreach($products as $product)
-								<li>PRODUCT: {{$product->name}}
-								{{$product->weight}} kg<br>
-								{!!$product->description !!}
-								</li>
-							@endforeach
-						</ul>
+                        ORDER: {{$order->id}}
+                        <br>
+                        Customer: {{$order->customer_id}}
+                        <br>
+                        Status: {{$order->status_id}}
+                        <br>
+                        Total Items: {{$order->items_total}}
+                        <br>
+                        From Country: {{$order->geoip_country}}
+                        <br>
+                        <ul>
+                        @foreach($order->products as $product)
+                        <li>
+                            {{$product->name}} :
+                            {{$product->weight}} kg<br>
+                        </li>
+                        @endforeach
 					</div>
 					<!-- /.box-body -->
 				</div>
