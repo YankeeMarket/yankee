@@ -21,15 +21,18 @@ use OAuth\Common\Http\Uri\Uri;
 class DPDController extends Controller
 {
 
-    private $base_url = getenv('DPD_BASE', 'https://lt.integration.dpd.eo.pl');
-    private $username = getenv('DPD_USERNAME', 'testuser1');
-    private $password = getenv('DPD_PASSWORD', 'testpassword1');
+    private $base_url = '';
+    private $username = '';
+    private $password = '';
 
     protected $storage;
 	private $httpClient;
 
     public function init()
     {
+        $this->base_url = getenv('DPD_BASE', 'https://lt.integration.dpd.eo.pl');
+        $this->username = getenv('DPD_USERNAME', 'testuser1');
+        $this->password = getenv('DPD_PASSWORD', 'testpassword1');
         $uriFactory = new \OAuth\Common\Http\Uri\UriFactory();
         $currentUri = $uriFactory->createFromAbsolute("http://localhost");
         $currentUri->setQuery('');
