@@ -190,7 +190,8 @@ class DPDController extends Controller
     public function test_label(Request $request, $pl_number)
     {
         $label = \App\Label::where("filename", $pl_number);
-        if ($label) {
+        Log::debug($label);
+        if ($label && $label->filename) {
             return $this->display_pdf($label->file, $pl_number);
         }
         return $this->get_label($pl_number);
