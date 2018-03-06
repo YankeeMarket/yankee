@@ -101,7 +101,7 @@ class DPDController extends Controller
     {
         $whc = new WebhookController();
         $order = $whc->retrieve($order_id);
-        $label = \App\Label::where("order_id", $order_id);
+        $label = \App\Label::where("order_id", $order_id)->first();
         if ($label) {
             $data['details'] = $order;
             $data['order_id'] = $order_id;
