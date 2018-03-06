@@ -97,6 +97,20 @@ class DPDController extends Controller
         //return $this->display_order_response(100, $details, '{"status":"ok","errlog":"","pl_number":["05809023217401"]}');
     }
 
+    public function create(Request $request, $order_id)
+    {
+        $whc = new WebhookController();
+        $order = $whc->retrieve($order_id);
+        $label = \App\Label::where("order_id" $order_id);
+        if ($label) {
+            $data['details'] = $order;
+            $data['order_id'] = $order_id;
+            $data['pl_number'] = $label->filename;
+            return view("parcel")->with($data);
+        }
+        return $this->create_shipment($order);
+    }
+
 
     private function make_create_call($order, $order_id, $the_order)
     {

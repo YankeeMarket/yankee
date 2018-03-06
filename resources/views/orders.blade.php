@@ -26,6 +26,7 @@
 						<ul>
 							@foreach($orders as $order)
 								<li>
+                                    <a href="{{ url('/create/'.$order->id)}}">Create or view shipping label</a><br>
 									ORDER: {{$order->id}}
 									<br>
 									Customer: {{$order->customer_id}}
