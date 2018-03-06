@@ -193,7 +193,7 @@ class DPDController extends Controller
         $label = \App\Label::where("filename", $pl_number)->first();
         Log::debug($label->filename);
         if ($label && $label->filename) {
-            $file = base64_decode($label->file);
+            $file = base64_decode(stream_get_contents($label->file));
             return $this->display_pdf($file, $pl_number);
         }
         return $this->get_label($pl_number);
@@ -283,7 +283,7 @@ class DPDController extends Controller
         $label = \App\Label::where('filename', $filename)->first();
         if ($label)
         {
-            $file = base64_decode($label->file);
+            $file = base64_decode(stream_get_contents($label->file));
             return $this->display_pdf($file, $filename);
         } else {
             $data['error'] = 'No Such Label in the system.';
