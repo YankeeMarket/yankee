@@ -103,7 +103,7 @@ class DPDController extends Controller
         $order = $whc->retrieve($order_id);
         $label = \App\Label::where("order_id", $order_id)->first();
         if ($label) {
-            $data['details'] = $order;
+            $data['details'][$order_id] = $order;
             $data['order_id'] = $order_id;
             $data['pl_number'] = $label->filename;
             return view("parcel")->with($data);
