@@ -79,7 +79,7 @@ class DPDController extends Controller
     private function get($resource)
     {
         Log::debug("Getting $resource from DPD");
-        
+
     }
 
     public function get_sample_order()
@@ -101,9 +101,9 @@ class DPDController extends Controller
     private function make_create_call($order, $order_id, $the_order)
     {
         $path = '/ws-mapper-rest/createShipment_';
-        
+
         $shipping_address = $order['addresses']->first();
-        
+
         $arguments = [];
 
         $arguments['name1'] = $shipping_address->first_name.' '.$shipping_address->last_name;
@@ -122,7 +122,7 @@ class DPDController extends Controller
 
         $arguments['parcel_type'] = env('PARCEL_TYPE');
 
-        if ($shipping_address->phone || $shipping_address->email) 
+        if ($shipping_address->phone || $shipping_address->email)
         {
             $arguments['predict'] = 'y';
             $arguments['phone'] = $shipping_address->phone;
@@ -146,17 +146,18 @@ class DPDController extends Controller
 
     public function create_shipment($order)
     {
-        
+
         //pull information from the order object
         Log::debug($order);
         $the_order = $order['order']->first();
         Log::debug($the_order);
-        $order_id = rand().$the_order;
+        //$order_id = rand().$the_order; //add randomness to the order number
+        $order_id = $the_order; //just use the store ID
 
         $response = $this->make_create_call($order, $order_id, $the_order);
-                
+
         return $this->display_order_response($the_order, $order, $response);
-        
+
     }
 
     public function display_order_response($the_order, $order, $response)
@@ -165,21 +166,21 @@ class DPDController extends Controller
         $data['details'][$the_order] = $order;
         $data['order_id'] = $the_order;
         $json = json_decode($response, true);
-        if (is_array($json) && 
-            array_key_exists('status', $json) && 
+        if (is_array($json) &&
+            array_key_exists('status', $json) &&
             $json['status'] == 'ok')
         {
             $pl = $json['pl_number'][0];
             $data['pl_number'] = $pl;
             Log::debug($pl);
             return view('parcel')->with($data);
-        } 
+        }
         /*
-        else if (substr($response, 0,21) == '<!DOCTYPE HTML PUBLIC') 
+        else if (substr($response, 0,21) == '<!DOCTYPE HTML PUBLIC')
         {
             echo $response;
         } */
-        else 
+        else
         {
             Log::debug("Returning raw response");
             $data['error'] = $response;
@@ -207,14 +208,14 @@ class DPDController extends Controller
 
         $response = $this->post($this->base_url.$label_path, $arguments);
         Log::debug($response);
-        
+
         if (json_decode($response, true))
         {
             $data['error'] = $response;
             return view('error')->with($data);
         }
         $start = substr($response, 0,21);
-        if ($start == '<!DOCTYPE HTML PUBLIC') 
+        if ($start == '<!DOCTYPE HTML PUBLIC')
         {
             echo $response; //error message formatted as html
         }
@@ -234,10 +235,10 @@ class DPDController extends Controller
     {
         $response = $this->make_close_manifest_call();
         $start = substr($response, 0,21);
-        if ($start == '<!DOCTYPE HTML PUBLIC') 
+        if ($start == '<!DOCTYPE HTML PUBLIC')
         {
             echo "Unable to close manifest - see logs.";
-        } 
+        }
         else if (json_decode($response, true))
         {
             echo "Unable to close manifest.".PHP_EOL;
@@ -257,7 +258,7 @@ class DPDController extends Controller
         $arguments['date'] = $date;
         $response = $this->post($this->base_url.$path, $arguments);
         Log::debug($response);
-        
+
         return $response;
     }
 
@@ -338,7 +339,7 @@ class DPDController extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $webhookContent = file_get_contents("php://input");
-            $result         = json_decode($webhookContent, true);            
+            $result         = json_decode($webhookContent, true);
             $store_id = $result['store_id'];
             $producer = $result['producer'];
             $scope =    $result['scope']; //should be "store/order/created"
@@ -350,7 +351,7 @@ class DPDController extends Controller
             $dpd = new DPDController();
             $dpd->initiate_order($data);
         }
-        
+
     }
 
     public function retrieve($order_id)
@@ -360,5 +361,5 @@ class DPDController extends Controller
         $data['addresses'] = $this->get("orders/$order_id/shippingaddresses");
         return $data;
     }
-   
+
 }
