@@ -65,10 +65,38 @@ class WebhookController extends Controller
     {
 
         //security check
-        $headers = apache_request_headers();
-        Log::debug($headers);
-        if (!array_key_exists('secret_key', $headers) || $headers['secret_key'] != getenv("SECRET_HEADER"))
+        $headers = array();
+        if (function_exists('apache_request_headers'))
         {
+            $headers = apache_request_headers();
+        }
+        else
+        {
+            foreach ($_SERVER as $name => $value)
+            {
+                if(substr($name,0,5)=='HTTP_')
+                {
+                    $name=substr($name,5);
+                    $name=str_replace('_',' ',$name);
+                    $name=strtolower($name);
+                    $name=ucwords($name);
+                    $name=str_replace(' ', '-', $name);
+
+                    $headers[$name] = $value;
+                }
+            }
+        }
+
+        Log::debug($headers);
+        if (!array_key_exists('secret_key', $headers))
+        {
+            Log::debug("Secret key header not present");
+            return response('', 403);
+        } else if ($headers['secret_key'] != getenv("SECRET_HEADER"))
+        {
+            Log::debug("Secret key header value not correct");
+            Log::debug("Value: ".$headers['secret_key']);
+            Log::debug("Should be ".getenv("SECRET_HEADER"));
             return response('', 403);
         }
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
