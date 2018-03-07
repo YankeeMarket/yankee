@@ -151,6 +151,7 @@ class DPDController extends Controller
 
 
         $response = $this->post($this->base_url.$path, $arguments);
+        Log::debug($response);
         return $response;
     }
 
@@ -412,27 +413,29 @@ class DPDController extends Controller
                 $pl = $json['pl_number'][0];
                 $data['pl_number'] = $pl;
             }
-
-            $labelresponse = $this->request_label($data['pl_number']);
-
-            //Log::debug($response);
-
-            if (json_decode($response, true))
+            if (array_key_exists('pl_number', $data))
             {
-                $data['error'] = $response;
-                //we have to report the error somehow
-            }
-            $start = substr($response, 0,21);
-            if ($start == '<!DOCTYPE HTML PUBLIC')
-            {
-                //hopefully this happens less now that we're in production
-                //we have to report this problem as well (Proxy Error or whatever)
-                //echo $response; //error message formatted as html
-            }
-            else
-            {
-                $this->store_pdf($response, 'order', $pl_number, 'Label '.$data['pl_number'], $order_id);
+                $labelresponse = $this->request_label($data['pl_number']);
 
+                //Log::debug($response);
+
+                if (json_decode($response, true))
+                {
+                    $data['error'] = $response;
+                    //we have to report the error somehow
+                }
+                $start = substr($response, 0,21);
+                if ($start == '<!DOCTYPE HTML PUBLIC')
+                {
+                    //hopefully this happens less now that we're in production
+                    //we have to report this problem as well (Proxy Error or whatever)
+                    //echo $response; //error message formatted as html
+                }
+                else
+                {
+                    $this->store_pdf($response, 'order', $pl_number, 'Label '.$data['pl_number'], $order_id);
+
+                }
             }
 
         }
