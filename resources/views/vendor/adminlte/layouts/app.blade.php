@@ -57,6 +57,7 @@ desired effect
 </div>
 @section('scripts')
     @include('adminlte::layouts.partials.scripts')
+    @yield('local_scripts')
 @show
 
 </body>

@@ -50,14 +50,14 @@ class WebhookController extends Controller
     {
         Log::debug("Going to connect to BigCommerce");
         $orders = $this->get('orders');
-        Log::debug($orders);
+        //Log::debug($orders);
         $data['orders'] = $orders;
         foreach ($orders as $order) {
             $order_detail = $this->retrieve($order->id);
-            Log::debug($order_detail);
+            //Log::debug($order_detail);
             $data['details'][$order->id] = $order_detail;
         }
-        Log::debug($data);
+        //Log::debug($data);
         return view('orders')->with($data);
     }
 
@@ -122,6 +122,8 @@ class WebhookController extends Controller
     public function retrieve($order_id)
     {
         $data['order'] = $this->get("orders/$order_id");
+        $customer_id = $data['order']['customer_id'];
+        $data['customer'] = $this->get("customers/$customer_id");
         $data['products'] = $this->get("orders/$order_id/products");
         $data['addresses'] = $this->get("orders/$order_id/shippingaddresses");
         return $data;

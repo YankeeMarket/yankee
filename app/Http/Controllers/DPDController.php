@@ -145,7 +145,7 @@ class DPDController extends Controller
 
 
         $arguments['order_number'] = $order_id; //test is 100
-        $arguments['order_number1'] = $the_order;
+        $arguments['parcel_number'] = $the_order;
 
         Log::debug($arguments);
 
@@ -158,7 +158,7 @@ class DPDController extends Controller
     {
 
         //pull information from the order object
-        Log::debug($order);
+        //Log::debug($order);
         $the_order = $order['order']->first();
         Log::debug($the_order);
         $order_id = rand().$the_order; //add randomness to the order number
@@ -209,7 +209,7 @@ class DPDController extends Controller
         return view('error')->with($data);
     }
 
-    public function test_label(Request $request, $pl_number)
+    public function label_from_order(Request $request, $order_id, $pl_number)
     {
         $label = \App\Label::where("filename", $pl_number)->first();
         if ($label && $label->filename) {
@@ -217,9 +217,13 @@ class DPDController extends Controller
             $file = base64_decode(stream_get_contents($label->file));
             return $this->display_pdf($file, $pl_number);
         }
-        $data['label_id'] = $pl_number;
-        $data['error'] = 'This label is not in the database.';
-        return view('error')->with($data);
+        try {
+            $this->get_label($pl_number, $order_id);
+        } catch (Exception $e) {
+            $data['label_id'] = $pl_number;
+            $data['error'] = 'This label is not in the database.';
+            return view('error')->with($data);
+        }
     }
 
     private function request_label($pl_number)
@@ -253,7 +257,7 @@ class DPDController extends Controller
         }
         else
         {
-            $this->store_pdf($response, 'order', $pl_number, 'Label $pl_number', $order_id);
+            $this->store_pdf($response, 'order', $pl_number, "Label $pl_number", $order_id);
             $this->display_pdf($response, $pl_number);
         }
     }
@@ -357,15 +361,23 @@ class DPDController extends Controller
     {
         Log::debug("Going to connect to BigCommerce");
         $orders = $this->get('orders');
-        Log::debug($orders);
+        //Log::debug($orders);
         $data['orders'] = $orders;
         foreach ($orders as $order) {
             $order_detail = $this->retrieve($order->id);
-            Log::debug($order_detail);
+            //Log::debug($order_detail);
             $data['details'][$order->id] = $order_detail;
         }
-        Log::debug($data);
+        //Log::debug($data);
         return view('orders')->with($data);
+    }
+
+    public function view_order(Request $request, $order_id)
+    {
+        $order_detail = $this->retrieve($order_id);
+        $data['details'][$order_id] = $order_detail;
+        $data['order'] = $order_detail['order'];
+        return view('order')->with($data);
     }
 
     public function initiate_order($data)

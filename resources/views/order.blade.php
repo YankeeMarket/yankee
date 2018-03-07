@@ -23,23 +23,37 @@
 						</div>
 					</div>
 					<div class="box-body">
-                        ORDER: {{$order->id}}
-                        <br>
-                        Customer: {{$order->customer_id}}
-                        <br>
-                        Status: {{$order->status_id}}
-                        <br>
-                        Total Items: {{$order->items_total}}
-                        <br>
-                        From Country: {{$order->geoip_country}}
-                        <br>
-                        <ul>
-                        @foreach($order->products as $product)
-                        <li>
-                            {{$product->name}} :
-                            {{$product->weight}} kg<br>
-                        </li>
-                        @endforeach
+                            <a href="{{ url('/create/'.$order->id)}}">Create or view shipping label</a><br>
+                            ORDER: {{$order->id}}
+                            <br>
+                            Customer: {{$order->customer_id}}
+                            <br>
+                            Status: {{$order->status}}
+                            <br>
+                            Total Items: {{$order->items_total}}
+                            <br>
+                            From Country: {{$order->geoip_country}}
+                            <br>
+                            Total: € {{number_format($order->total_inc_tax, 2)}}
+                            <ul>
+                                @foreach($details[$order->id]['products'] as $product)
+                                    <li>
+                                        {{$product->name}} (ID {{$product->id}})<br>
+                                        {{$product->weight}} kg<br>
+                                        Item cost: €{{number_format($product->total_inc_tax, 2)}}
+                                    </li>
+                                @endforeach
+                            </ul>
+                            Ship to: <br>
+                            {{$details[$order->id]['addresses']->first()->street_1}}<br>
+                            {{$details[$order->id]['addresses']->first()->street_2}}<br>
+                            {{$details[$order->id]['addresses']->first()->city}}<br>
+                            {{$details[$order->id]['addresses']->first()->zip}}<br>
+                            {{$details[$order->id]['addresses']->first()->country}}<br>
+                            {{$details[$order->id]['addresses']->first()->country_iso2}}<br>
+                            Shipping: {{$details[$order->id]['addresses']->first()->shipping_method}}<br>
+                            Shipping cost: €{{number_format($details[$order->id]['addresses']->first()->cost_inc_tax, 2)}}<br>
+
 					</div>
 					<!-- /.box-body -->
 				</div>

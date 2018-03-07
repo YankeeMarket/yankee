@@ -28,7 +28,7 @@
 						?>
                         PARCEL NUMBER: {{$pl_number}}
                         <br>
-                        <a href='{{url("/label/$pl_number")}}'>Get Shipping Label</a><br>
+                        <a href='{{ url("/label/$order_id/$pl_number") }}'>Get Shipping Label</a><br>
                         ORDER: {{$order_id}}
                         <br>
                         Customer: {{$order['customer_id']}}

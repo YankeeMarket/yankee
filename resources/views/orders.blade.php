@@ -23,43 +23,33 @@
 						</div>
 					</div>
 					<div class="box-body">
-						<ul>
-							@foreach($orders as $order)
-								<li>
-                                    <a href="{{ url('/create/'.$order->id)}}">Create or view shipping label</a><br>
-									ORDER: {{$order->id}}
-									<br>
-									Customer: {{$order->customer_id}}
-									<br>
-									Status: {{$order->status}}
-									<br>
-									Total Items: {{$order->items_total}}
-									<br>
-									From Country: {{$order->geoip_country}}
-									<br>
-									Total: € {{number_format($order->total_inc_tax, 2)}}
-									<ul>
-										@foreach($details[$order->id]['products'] as $product)
-											<li>
-												{{$product->name}} (ID {{$product->id}})<br>
-												{{$product->weight}} kg<br>
-												Item cost: €{{number_format($product->total_inc_tax, 2)}}
-											</li>
-										@endforeach
-									</ul>
-									Ship to: <br>
-									{{$details[$order->id]['addresses']->first()->street_1}}<br>
-									{{$details[$order->id]['addresses']->first()->street_2}}<br>
-									{{$details[$order->id]['addresses']->first()->city}}<br>
-									{{$details[$order->id]['addresses']->first()->zip}}<br>
-									{{$details[$order->id]['addresses']->first()->country}}<br>
-									{{$details[$order->id]['addresses']->first()->country_iso2}}<br>
-									Shipping: {{$details[$order->id]['addresses']->first()->shipping_method}}<br>
-									Shipping cost: €{{number_format($details[$order->id]['addresses']->first()->cost_inc_tax, 2)}}<br>
-
-								</li>
-							@endforeach
-						</ul>
+                        <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Status</th>
+                                    <th>Customer</th>
+                                    <th>Ship to City</th>
+                                    <th>Total Items</th>
+                                    <th>Total Price</th>
+                                    <th>Date Placed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+							    @foreach($orders as $order)
+                                    <tr>
+                                        <td><a href="{{ url('/create/'.$order->id) }}">{{$order->id}}</a></td>
+                                        <td>{{$order->status}}</td>
+                                        <td>{{$details[$order->id]['addresses']->first()->first_name}}
+                                            {{$details[$order->id]['addresses']->first()->last_name}}</td>
+                                        <td>{{$details[$order->id]['addresses']->first()->city}}</td>
+                                        <td>{{$order->items_total}}</td>
+                                        <td>€ {{number_format($order->total_inc_tax, 2)}}</td>
+                                        <td>{{Carbon\Carbon::createFromFormat('D, d M Y H:i:s O', $order->date_created)->toDayDateTimeString()}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
 					</div>
 					<!-- /.box-body -->
 				</div>
@@ -68,4 +58,16 @@
 			</div>
 		</div>
 	</div>
+@endsection
+
+@section('local_scripts')
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#datatable').DataTable(
+        {
+            "order": [[0, 'desc']]
+        }
+    );
+});
+</script>
 @endsection

@@ -18,9 +18,10 @@ Route::get('/', 'Auth\LoginController@showLoginForm');
 Route::group(['middleware' => 'auth'], function () {
     Route::get("/products", 'BigCommerceController@index');
     Route::get("/orders", 'WebhookController@index');
+    Route::get("/order/{order_id}", "DPDController@view_order");
     Route::get("/create/{order_id}", 'DPDController@create');
     Route::get("/create", 'DPDController@test_create');
-    Route::get("/label/{pl_number}", 'DPDController@test_label');
+    Route::get("/label/{order_id}/{pl_number}", 'DPDController@label_from_order');
     Route::get("/close", 'DPDController@test_close');
     Route::get("/labels", 'DPDController@labels');
     //    Route::get('/link1', function ()    {
