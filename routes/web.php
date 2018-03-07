@@ -11,7 +11,7 @@
 |
 */
 
-Route::get("/orderCreated", 'WebhookController@orderCreated');
+Route::post("/orderCreated", 'WebhookController@orderCreated');
 
 Route::get('/', 'Auth\LoginController@showLoginForm');
 

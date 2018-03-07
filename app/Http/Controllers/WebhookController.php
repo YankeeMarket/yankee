@@ -29,7 +29,7 @@ class WebhookController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
         $this->hash = env('BC_STORE_HASH');
         $this->token = env('BC_ACCESS_TOKEN');
         Bigcommerce::setAPIVersion('v2');
@@ -66,7 +66,8 @@ class WebhookController extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $webhookContent = file_get_contents("php://input");
-            $result         = json_decode($webhookContent, true);            
+            $result         = json_decode($webhookContent, true);
+            Log::debug($result);
             $store_id = $result['store_id'];
             $producer = $result['producer'];
             $scope =    $result['scope']; //should be "store/order/created"
@@ -77,8 +78,9 @@ class WebhookController extends Controller
             $data = $this->retrieve($order_id);
             $dpd = new DPDController();
             $dpd->initiate_order($data);
+            return response($order_id, 200);
         }
-        
+
     }
 
     public function retrieve($order_id)
@@ -88,5 +90,5 @@ class WebhookController extends Controller
         $data['addresses'] = $this->get("orders/$order_id/shippingaddresses");
         return $data;
     }
-   
+
 }
