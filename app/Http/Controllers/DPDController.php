@@ -143,9 +143,10 @@ class DPDController extends Controller
             $arguments['predict'] = 'n';
         }
 
+        $tstamp = Carbon\Carbon::now();
 
         $arguments['order_number'] = $order_id; //test is 100
-        $arguments['parcel_number'] = $the_order;
+        $arguments['parcel_number'] = $the_order.'-'.$tstamp->format('His');
 
         Log::debug($arguments);
 
