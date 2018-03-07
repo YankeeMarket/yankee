@@ -345,7 +345,7 @@ class DPDController extends Controller
 
     function store_pdf($response, $type, $filename, $description, $order_id)
     {
-        $label = \App\Label::where("order_id", $order_id);
+        $label = \App\Label::where("order_id", $order_id)->first();
         if (!$label)
         {
             $label = new \App\Label();
