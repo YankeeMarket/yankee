@@ -64,10 +64,18 @@ class WebhookController extends Controller
     public function orderCreated(Request $request)
     {
 
+        //security check
+        $headers = apache_request_headers();
+        Log::debug($headers);
+        if (!array_key_exists('secret_key', $headers) || $headers['secret_key'] != getenv("SECRET_HEADER"))
+        {
+            return response('', 403);
+        }
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $webhookContent = file_get_contents("php://input");
             $result         = json_decode($webhookContent, true);
             Log::debug($result);
+
             $store_id = $result['store_id'];
             $producer = $result['producer'];
             $scope =    $result['scope']; //should be "store/order/created"
