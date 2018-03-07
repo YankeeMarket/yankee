@@ -13,6 +13,8 @@ use Bigcommerce;
 use Log;
 use Carbon\Carbon;
 use OAuth\Common\Http\Uri\Uri;
+use Notification;
+use App\Notifications\OrderCreated;
 
 /**
  * Class BigCommerceController
@@ -74,12 +76,6 @@ class DPDController extends Controller
         Log::debug($uri->getAbsoluteUri());
         $response = $this->httpClient->retrieveResponse($uri, '', [], 'POST');
         return $response;
-    }
-
-    private function get($resource)
-    {
-        Log::debug("Getting $resource from DPD");
-
     }
 
     public function get_sample_order()
@@ -168,6 +164,13 @@ class DPDController extends Controller
         //$order_id = rand().$the_order; //add randomness to the order number
         $order_id = $the_order; //just use the store ID
 
+        $label = \App\Label::where('order_id', $the_order)->first();
+        if ($label)
+        {
+            $data['pl_number'] = $label->filename;
+            return view('parcel')->with($data);
+        }
+
         $response = $this->make_create_call($order, $order_id, $the_order);
 
         return $this->display_order_response($the_order, $order, $response);
@@ -181,40 +184,46 @@ class DPDController extends Controller
         $data['order_id'] = $the_order;
         $json = json_decode($response, true);
         if (is_array($json) &&
-            array_key_exists('status', $json) &&
-            $json['status'] == 'ok')
+            array_key_exists('status', $json))
         {
-            $pl = $json['pl_number'][0];
-            $data['pl_number'] = $pl;
-            Log::debug($pl);
-            return view('parcel')->with($data);
+            if ($json['status'] == 'ok')
+            {
+                $pl = $json['pl_number'][0];
+                $data['pl_number'] = $pl;
+                Log::debug($pl);
+                return view('parcel')->with($data);
+            }
+            else if ($json['status'] == 'err')
+            {
+                $data['error'] = $json['errlog'];
+                return view('error')->with($data);
+            }
         }
         /*
         else if (substr($response, 0,21) == '<!DOCTYPE HTML PUBLIC')
         {
             echo $response;
         } */
-        else
-        {
-            Log::debug("Returning raw response");
-            $data['error'] = $response;
-            return view('error')->with($data);
-        }
+        Log::debug("Returning raw response");
+        $data['error'] = $response;
+        return view('error')->with($data);
     }
 
     public function test_label(Request $request, $pl_number)
     {
         $label = \App\Label::where("filename", $pl_number)->first();
-        Log::debug($label->filename);
         if ($label && $label->filename) {
+            Log::debug($label->filename);
             $file = base64_decode(stream_get_contents($label->file));
             return $this->display_pdf($file, $pl_number);
         }
-        return $this->get_label($pl_number);
+        $data['label_id'] = $pl_number;
+        $data['error'] = 'This label is not in the database.';
+        return view('error')->with($data);
     }
 
-    public function get_label($pl_number) {
-
+    private function request_label($pl_number)
+    {
         $label_path = '/ws-mapper-rest/parcelPrint_';
         $arguments = [];
         $arguments['printType'] = 'pdf';
@@ -222,10 +231,18 @@ class DPDController extends Controller
         $arguments['parcels'] = $pl_number;
 
         $response = $this->post($this->base_url.$label_path, $arguments);
-        Log::debug($response);
+        return $response;
+    }
+
+    public function get_label($pl_number, $order_id) {
+
+        $response = $this->request_label($pl_number);
+
+        //Log::debug($response);
 
         if (json_decode($response, true))
         {
+            $data['label_id'] = $pl_number;
             $data['error'] = $response;
             return view('error')->with($data);
         }
@@ -236,7 +253,7 @@ class DPDController extends Controller
         }
         else
         {
-            $this->store_pdf($response, 'order', $pl_number, 'Label $pl_number');
+            $this->store_pdf($response, 'order', $pl_number, 'Label $pl_number', $order_id);
             $this->display_pdf($response, $pl_number);
         }
     }
@@ -261,7 +278,7 @@ class DPDController extends Controller
         }
         else
         {
-            $this->store_pdf($response, 'close', 'Manifest_'.$date, "Close Manifest Label for $date");
+            $this->store_pdf($response, 'close', 'Manifest_'.$date, "Close Manifest Label for $date", 0);
             echo "Close PDF stored in database as Manifest_$date";
         }
     }
@@ -319,13 +336,14 @@ class DPDController extends Controller
         echo $response;
     }
 
-    function store_pdf($response, $type, $filename, $description)
+    function store_pdf($response, $type, $filename, $description, $order_id)
     {
         $label = new \App\Label();
         $label->description = $description;
         $label->filename = $filename;
         $label->type = $type;
         $label->file = base64_encode($response);
+        $label->order_id = $order_id;
         $label->save();
 
     }
@@ -350,32 +368,69 @@ class DPDController extends Controller
         return view('orders')->with($data);
     }
 
-    public function orderCreated(Request $request)
+    public function initiate_order($data)
     {
+        //$data comes from WebhookController->retrieve
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $webhookContent = file_get_contents("php://input");
-            $result         = json_decode($webhookContent, true);
-            $store_id = $result['store_id'];
-            $producer = $result['producer'];
-            $scope =    $result['scope']; //should be "store/order/created"
-            $type =     $result['data']['type']; //should be "order"
-            $order_id = $result['data']['id'];  //should be numeric
+        //$data['order'] = $this->get("orders/$order_id");
+        //$data['products'] = $this->get("orders/$order_id/products");
+        //$data['addresses'] = $this->get("orders/$order_id/shippingaddresses");
 
-            //look up order by id
-            $data = $this->retrieve($order_id);
-            $dpd = new DPDController();
-            $dpd->initiate_order($data);
+        //we want to create a parcel here
+
+        $order_id = $data['order']->first();
+        $label = \App\Label::where("order_id", $order_id)->first();
+        if ($label) {
+            //we already have a label for this order (test or error)
+            $data['pl_number'] = $label->filename;
+        } else {
+            $response = $this->make_create_call($data, $order_id, $order_id);
+            $json = json_decode($response, true);
+            if (is_array($json) &&
+                array_key_exists('status', $json) &&
+                $json['status'] == 'ok')
+            {
+                $pl = $json['pl_number'][0];
+                $data['pl_number'] = $pl;
+            }
+
+            $labelresponse = $this->request_label($data['pl_number']);
+
+            //Log::debug($response);
+
+            if (json_decode($response, true))
+            {
+                $data['error'] = $response;
+                //we have to report the error somehow
+            }
+            $start = substr($response, 0,21);
+            if ($start == '<!DOCTYPE HTML PUBLIC')
+            {
+                //hopefully this happens less now that we're in production
+                //we have to report this problem as well (Proxy Error or whatever)
+                //echo $response; //error message formatted as html
+            }
+            else
+            {
+                $this->store_pdf($response, 'order', $pl_number, 'Label '.$data['pl_number'], $order_id);
+
+            }
+
+        }
+        if (array_key_exists('pl_number', $data))
+        {
+
+            //now we set up the email and provide the good news
+            //$this->display_pdf($response, $pl_number);
+            $users = \App\User::all(); //only admins log in here
+            Log::debug("Users will now be sent an email");
+            foreach ($users as $user)
+            {
+                Log::debug($user->email);
+            }
+            Notification::send($users, new OrderCreated($order_id, $data['pl_number']));
         }
 
-    }
-
-    public function retrieve($order_id)
-    {
-        $data['order'] = $this->get("orders/$order_id");
-        $data['products'] = $this->get("orders/$order_id/products");
-        $data['addresses'] = $this->get("orders/$order_id/shippingaddresses");
-        return $data;
     }
 
 }

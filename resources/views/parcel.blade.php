@@ -24,9 +24,7 @@
 					</div>
 					<div class="box-body">
 						<?php
-						Log::debug("trying to output parcel blade");
 						$order = $details[$order_id]['order'];
-						Log::debug($order);
 						?>
                         PARCEL NUMBER: {{$pl_number}}
                         <br>

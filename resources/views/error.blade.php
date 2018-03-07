@@ -13,7 +13,14 @@
 				<!-- Default box -->
 				<div class="box box-solid box-danger">
 					<div class="box-header">
-						<h3 class="box-title">Yankee Market Order {{$order_id}}</h3>
+						<h3 class="box-title">Yankee Market Order
+                            @isset($order_id)
+                                {{$order_id}}
+                            @endisset
+                            @isset($label_id)
+                                Parcel #{{$label_id}}
+                            @endisset
+                        </h3>
 
 					</div>
 					<div class="box-body">
