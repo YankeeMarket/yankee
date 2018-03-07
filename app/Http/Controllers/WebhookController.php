@@ -95,7 +95,7 @@ class WebhookController extends Controller
         } else if ($headers['Secretkey'] != getenv("SECRET_HEADER"))
         {
             Log::debug("Secret key header value not correct");
-            Log::debug("Value: ".$headers['secret_key']);
+            Log::debug("Value: ".$headers['Secretkey']);
             Log::debug("Should be ".getenv("SECRET_HEADER"));
             return response('', 403);
         }
