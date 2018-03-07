@@ -399,13 +399,14 @@ class DPDController extends Controller
 
         //we want to create a parcel here
 
-        $order_id = $data['order']->first();
-        $label = \App\Label::where("order_id", $order_id)->first();
+        $the_order = $data['order']->first();
+        $order_id = rand().$the_order;
+        $label = \App\Label::where("order_id", $the_order)->first();
         if ($label) {
             //we already have a label for this order (test or error)
             $data['pl_number'] = $label->filename;
         } else {
-            $response = $this->make_create_call($data, $order_id, $order_id);
+            $response = $this->make_create_call($data, $order_id, $the_order);
             $json = json_decode($response, true);
             if (is_array($json) &&
                 array_key_exists('status', $json) &&
@@ -434,7 +435,7 @@ class DPDController extends Controller
                 }
                 else
                 {
-                    $this->store_pdf($response, 'order', $pl_number, 'Label '.$data['pl_number'], $order_id);
+                    $this->store_pdf($response, 'order', $pl_number, 'Label '.$data['pl_number'], $the_order);
 
                 }
             }
@@ -451,7 +452,7 @@ class DPDController extends Controller
             {
                 Log::debug($user->email);
             }
-            Notification::send($users, new OrderCreated($order_id, $data['pl_number']));
+            Notification::send($users, new OrderCreated($the_order, $data['pl_number']));
         }
 
     }
