@@ -161,8 +161,8 @@ class DPDController extends Controller
         Log::debug($order);
         $the_order = $order['order']->first();
         Log::debug($the_order);
-        //$order_id = rand().$the_order; //add randomness to the order number
-        $order_id = $the_order; //just use the store ID
+        $order_id = rand().$the_order; //add randomness to the order number
+        //$order_id = $the_order; //just use the store ID
 
         $label = \App\Label::where('order_id', $the_order)->first();
         if ($label)
