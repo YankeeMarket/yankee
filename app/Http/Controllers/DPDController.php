@@ -215,7 +215,10 @@ class DPDController extends Controller
         if ($label && $label->filename) {
             Log::debug($label->filename);
             $file = base64_decode(stream_get_contents($label->file));
-            return $this->display_pdf($file, $pl_number);
+            if (strlen($file) > 0)
+            {
+                return $this->display_pdf($file, $pl_number);
+            }
         }
         try {
             $this->get_label($pl_number, $order_id);
@@ -342,7 +345,11 @@ class DPDController extends Controller
 
     function store_pdf($response, $type, $filename, $description, $order_id)
     {
-        $label = new \App\Label();
+        $label = \App\Label::where("order_id", $order_id);
+        if (!$label)
+        {
+            $label = new \App\Label();
+        }
         $label->description = $description;
         $label->filename = $filename;
         $label->type = $type;
