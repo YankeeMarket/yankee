@@ -366,43 +366,6 @@ class DPDController extends Controller
 
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return Response
-     */
-    public function view_all_orders(Request $request)
-    {
-        $orders = $this->get('orders');
-        //Log::debug($orders);
-        $data['orders'] = $orders;
-        foreach ($orders as $order) {
-            $order_detail = $this->retrieve($order->id);
-            //Log::debug($order_detail);
-            $data['details'][$order->id] = $order_detail;
-        }
-        //Log::debug($data);
-        return view('all_orders')->with($data);
-    }
-
-    public function view_non_cancelled_orders(Request $request)
-    {
-        $orders = $this->get('orders');
-        //Log::debug($orders);
-        $data['orders'] = $orders;
-        foreach ($orders as $order) {
-            if ($order->status == 'Cancelled') {
-                continue;
-            }
-            $data['orders'][] = $order;
-            $order_detail = $this->retrieve($order->id);
-            //Log::debug($order_detail);
-            $data['details'][$order->id] = $order_detail;
-        }
-        //Log::debug($data);
-        return view('orders')->with($data);
-    }
-
     public function view_order(Request $request, $order_id)
     {
         $order_detail = $this->retrieve($order_id);
