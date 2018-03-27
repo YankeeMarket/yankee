@@ -72,7 +72,7 @@
                                 </tbody>
                             </table>
                         @else
-                            There are no order labels in the system
+                            There are no order labels in the local database
                         @endif
 
                         <hr>
