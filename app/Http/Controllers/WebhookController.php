@@ -132,7 +132,8 @@ class WebhookController extends Controller
     public function get_status($order_id)
     {
         $order = $this->get("orders/$order_id");
-        return $order->status;
+        Log::debug($order);
+        return optional($order->status);
     }
 
 }
