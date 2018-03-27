@@ -39,7 +39,6 @@
                             <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>PL Number</th>
                                         <th>Date</th>
                                         <th>Order</th>
                                         <th>Label</th>
@@ -50,7 +49,6 @@
 
                                     @foreach($order_labels as $label)
                                         <tr>
-                                            <td>{{$label->filename}}</td>
                                             <td>{{optional($label->created_at)->format('Y-m-d')}}</td>
                                             <td>
                                                 <a href='{{url("create/".$label->order_id) }}'>
@@ -59,7 +57,7 @@
                                             </td>
                                             <td>
                                                 <a href='{{url("label/".$label->order_id."/".$label->filename) }}'>
-                                                    <i class='fa fa-file-pdf-o'></i> <span>View</span>
+                                                    <i class='fa fa-file-pdf-o'></i> <span>{{$label->filename}}</span>
                                                 </a>
                                             </td>
                                             <td>
