@@ -62,10 +62,8 @@ class WebhookController extends Controller
 
      public function view_non_cancelled_orders(Request $request)
      {
-         $whc = new WebhookController();
-         $orders = $whc->get('orders');
+         $orders = $this->get('orders');
          //Log::debug($orders);
-         $data['orders'] = $orders;
          foreach ($orders as $order) {
              if ($order->status == 'Cancelled') {
                  continue;
