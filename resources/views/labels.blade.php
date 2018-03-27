@@ -51,8 +51,8 @@
                                         <tr>
                                             <td>{{$label->filename}}</td>
                                             <td>{{optional($label->created_at)->format('Y-M-j')}}</td>
-                                            <td><a href='{{url("label/".$label->filename) }}'><i class='fa fa-file-pdf'></i><span>View</span></a></td>
-                                            <td><a href='{{url("delete/".$label->filename) }}'><i class='fa fa-trash-alt'></i><span>Delete</span></a></td>
+                                            <td><a href='{{url("label/".$label->order_id."/".$label->filename) }}'><i class='far fa-file-pdf'></i> <span>View</span></a></td>
+                                            <td><a href='{{url("delete/".$label->filename) }}'><i class='far fa-trash-alt'></i> <span>Delete</span></a></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -62,7 +62,7 @@
                         @endif
 
                         <hr>
-                        <h5><a href='{{ url("/cull") }}'><i class='fa fa-calendar'></i><span>Delete Labels Created before {{Carbon\Carbon::now()->subMonth()->format('Y-M-j')}}</span></a></h5>
+                        <h5><a href='{{ url("/cull") }}'><i class='fa fa-calendar'></i> <span>Delete Labels Created before {{Carbon\Carbon::now()->subMonth()->format('Y-M-j')}}</span></a></h5>
 
 					</div>
 					<!-- /.box-body -->
