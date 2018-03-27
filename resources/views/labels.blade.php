@@ -62,7 +62,7 @@
                                             </td>
                                             <td>
                                                 <a href='{{url("delete/".$label->filename) }}'>
-                                                    <i class='fa fa-trash'></i> <span class="text-danger">Delete</span>
+                                                    <span class="text-danger"><i class='fa fa-trash'></i> Delete</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -74,7 +74,7 @@
                         @endif
 
                         <hr>
-                        <h5><a href='{{ url("/cull") }}'><i class='fa fa-calendar'></i> <span class="text-danger">Delete Labels Created before {{Carbon\Carbon::now()->subMonth()->format('Y-m-d')}}</span></a></h5>
+                        <h5><a href='{{ url("/cull") }}'><span class="text-danger"><i class='fa fa-calendar'></i> Delete Labels Created before {{Carbon\Carbon::now()->subMonth()->format('Y-m-d')}}</span></a></h5>
 
 					</div>
 					<!-- /.box-body -->
