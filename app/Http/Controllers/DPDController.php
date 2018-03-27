@@ -490,4 +490,10 @@ class DPDController extends Controller
 
     }
 
+    public function cull_labels()
+    {
+        $this->find_old_labels();
+        return $this->labels();
+    }
+
 }

@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("/close", 'DPDController@test_close');
     Route::get("/labels", 'DPDController@labels');
     Route::get("/delete/{pl_number}", 'DPDController@delete_label');
+    Route::get("/cull", 'DPDController@cull_labels');
     //    Route::get('/link1', function ()    {
 //        // Uses Auth Middleware
 //    });

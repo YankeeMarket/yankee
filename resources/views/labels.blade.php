@@ -50,9 +50,9 @@
                                     @foreach($order_labels as $label)
                                         <tr>
                                             <td>{{$label->filename}}</td>
-                                            <td>{{optional($label->created_at)->format('Y-M-D')}}</td>
-                                            <td><a href={{url("label/".$label->filename) }}><i class='fa fa-file-pdf'></i> View</a></td>
-                                            <td><a href={{url("delete/".$label->filename) }}><i class='fa fa-trash-alt'></i> Delete</a></td>
+                                            <td>{{optional($label->created_at)->format('Y-M-j')}}</td>
+                                            <td><a href='{{url("label/".$label->filename) }}'><i class='fa fa-file-pdf'></i><span>View</span></a></td>
+                                            <td><a href='{{url("delete/".$label->filename) }}'><i class='fa fa-trash-alt'></i><span>Delete</span></a></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -60,6 +60,9 @@
                         @else
                             There are no order labels in the system
                         @endif
+
+                        <hr>
+                        <h5><a href='{{ url("/cull") }}'><i class='fa fa-calendar'></i><span>Delete Labels Created before {{Carbon::now()->subMonth()->format('Y-M-j')}}</span></a></h5>
 
 					</div>
 					<!-- /.box-body -->
