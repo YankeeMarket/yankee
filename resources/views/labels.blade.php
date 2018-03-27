@@ -61,7 +61,11 @@
                                                     <i class='fa fa-file-pdf-o'></i> <span>{{$label->filename}}</span>
                                                 </a>
                                             </td>
-                                            <td>{{optional($status[$label->order_id])}}</td>
+                                            <td>
+                                                @if (isset($status) && array_key_exists($label->order_id, $status))
+                                                    {{$status[$label->order_id]}}
+                                                @endif
+                                            </td>
                                             <td>
                                                 <a href='{{url("delete/".$label->filename) }}'>
                                                     <span class="text-danger"><i class='fa fa-trash'></i> Delete</span>
