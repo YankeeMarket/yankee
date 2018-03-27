@@ -23,7 +23,7 @@
 						</div>
 					</div>
 					<div class="box-body">
-                        @if($orders)
+                        @isset($orders)
                             <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
@@ -53,7 +53,7 @@
                             </table>
                         @else
                             There are no Non-Cancelled Orders in BigCommerce
-                        @endif
+                        @endisset
                         <hr>
                         <h5><a href="{{url('/all_orders') }}">View All Orders (including Cancelled)</a></h5>
 					</div>
