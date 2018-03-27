@@ -87,3 +87,12 @@
 		</div>
 	</div>
 @endsection
+
+
+@section('local_scripts')
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#datatable').DataTable();
+});
+</script>
+@endsection
