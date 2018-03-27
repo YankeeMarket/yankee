@@ -338,7 +338,7 @@ class DPDController extends Controller
         $data['order_labels'] = \App\Label::where('type', 'order')->get();
         foreach($data['order_labels'] as $label)
         {
-            $label->status = $whc->get_status($label->order_id);
+            $data['status'][$label->order_id] = $whc->get_status($label->order_id);
         }
         return view('labels')->with($data);
     }
