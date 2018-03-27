@@ -64,6 +64,7 @@ class WebhookController extends Controller
      {
          $orders = $this->get('orders');
          //Log::debug($orders);
+         $data = [];
          foreach ($orders as $order) {
              if ($order->status == 'Cancelled') {
                  continue;
