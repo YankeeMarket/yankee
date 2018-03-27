@@ -476,16 +476,16 @@ class DPDController extends Controller
     {
         $month_ago = Carbon::now()->subMonth();
         Log::debug("going to delete labels from before ".$month_ago);
-        echo "going to delete labels from before ".$month_ago.PHP_EOL;
+        //echo "going to delete labels from before ".$month_ago.PHP_EOL;
         $labels = \App\Label::where([
                 ["type", "order"],
                 ["updated_at", '<=', $month_ago]
             ])->get();
         foreach($labels as $label)
         {
-            echo ("Would delete Label ".$label->id." with pl_number ".$label->filename.PHP_EOL);
+            //echo ("Would delete Label ".$label->id." with pl_number ".$label->filename.PHP_EOL);
             Log::debug("Would delete Label ".$label->id." with pl_number ".$label->filename);
-            //$this->remove_label($label->filename);
+            $this->remove_label($label->filename);
         }
 
     }
