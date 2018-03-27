@@ -340,7 +340,6 @@ class DPDController extends Controller
         {
             $data['status'][$label->order_id] = $whc->get_status($label->order_id);
         }
-        Log::debug($data); //let's see what is erroring out here
         return view('labels')->with($data);
     }
 

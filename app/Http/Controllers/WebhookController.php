@@ -153,7 +153,9 @@ class WebhookController extends Controller
         if ($order)
         {
             return $order['status'];
-        } else {
+        }
+        else 
+        {
             return null;
         }
     }
