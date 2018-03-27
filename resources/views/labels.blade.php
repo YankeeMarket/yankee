@@ -51,7 +51,7 @@
                                     @foreach($order_labels as $label)
                                         <tr>
                                             <td>{{$label->filename}}</td>
-                                            <td>{{optional($label->created_at)->format('Y-M-j')}}</td>
+                                            <td>{{optional($label->created_at)->format('Y-m-d')}}</td>
                                             <td>
                                                 <a href='{{url("create/".$label->order_id) }}'>
                                                     <i class='fa fa-shopping-cart'></i> <span>Order {{$label->order_id}}</span>
@@ -76,7 +76,7 @@
                         @endif
 
                         <hr>
-                        <h5><a href='{{ url("/cull") }}'><i class='fa fa-calendar'></i> <span class="text-danger">Delete Labels Created before {{Carbon\Carbon::now()->subMonth()->format('Y-M-j')}}</span></a></h5>
+                        <h5><a href='{{ url("/cull") }}'><i class='fa fa-calendar'></i> <span class="text-danger">Delete Labels Created before {{Carbon\Carbon::now()->subMonth()->format('Y-m-d')}}</span></a></h5>
 
 					</div>
 					<!-- /.box-body -->
