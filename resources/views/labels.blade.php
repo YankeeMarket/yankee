@@ -35,10 +35,6 @@
 					</div>
 					<div class="box-body">
                         @if($order_labels)
-                            @php
-                                Log::debug($status[100]);
-                                Log::debug($status[100]->value);
-                            @endphp
                             <h3>Order Labels</h3>
                             <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead>
@@ -65,7 +61,7 @@
                                                     <i class='fa fa-file-pdf-o'></i> <span>{{$label->filename}}</span>
                                                 </a>
                                             </td>
-                                            <td>{{$status[$label->order_id]->value}}</td>
+                                            <td>{{optional($status[$label->order_id])}}</td>
                                             <td>
                                                 <a href='{{url("delete/".$label->filename) }}'>
                                                     <span class="text-danger"><i class='fa fa-trash'></i> Delete</span>
