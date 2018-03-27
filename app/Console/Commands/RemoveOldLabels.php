@@ -6,7 +6,8 @@ use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Storage;
 use Log;
-																																																																																				
+use App\Http\Controllers\DPDController;
+
 
 class RemoveOldLabels extends Command
 {
@@ -43,10 +44,9 @@ class RemoveOldLabels extends Command
      */
     public function handle()
     {
-        
+        $dpd = new DPDController();
+        $dpd->find_old_labels();
     }
 
 
 }
-
-

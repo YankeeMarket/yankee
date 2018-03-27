@@ -18,7 +18,7 @@
                     <div class="box-body">
                         {{$error}}
                     </div>
-                </div>    
+                </div>
                 @endisset
 
 				<!-- Default box -->
@@ -42,6 +42,7 @@
                                         <th>PL Number</th>
                                         <th>Date</th>
                                         <th>Link</th>
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -49,8 +50,9 @@
                                     @foreach($order_labels as $label)
                                         <tr>
                                             <td>{{$label->filename}}</td>
-                                            <td>{{$label->created_at->format('Y-M-D')}}</td>
-                                            <td><a href={{url("label/".$label->filename) }}>View</a></td>
+                                            <td>{{optional($label->created_at)->format('Y-M-D')}}</td>
+                                            <td><a href={{url("label/".$label->filename) }}><i class='fa fa-file-pdf'></i> View</a></td>
+                                            <td><a href={{url("delete/".$label->filename) }}><i class='fa fa-trash-alt'></i> Delete</a></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -58,7 +60,7 @@
                         @else
                             There are no order labels in the system
                         @endif
-						
+
 					</div>
 					<!-- /.box-body -->
 				</div>
