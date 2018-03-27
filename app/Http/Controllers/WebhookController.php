@@ -129,4 +129,10 @@ class WebhookController extends Controller
         return $data;
     }
 
+    public function get_status($order_id)
+    {
+        $order = $this->get("orders/$order_id");
+        return $order->status;
+    }
+
 }

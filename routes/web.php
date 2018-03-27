@@ -17,7 +17,8 @@ Route::get('/', 'Auth\LoginController@showLoginForm');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get("/products", 'BigCommerceController@index');
-    Route::get("/orders", 'WebhookController@index');
+    Route::get("/orders", 'DPDController@view_non_cancelled_orders');
+    Route::get("/all_orders", 'DPDController@view_all_orders');
     Route::get("/order/{order_id}", "DPDController@view_order");
     Route::get("/create/{order_id}", 'DPDController@create');
     Route::get("/create", 'DPDController@test_create');

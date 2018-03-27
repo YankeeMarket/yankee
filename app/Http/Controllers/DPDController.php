@@ -334,7 +334,12 @@ class DPDController extends Controller
 
     public function labels()
     {
+        $whc = new WebhookController();
         $data['order_labels'] = \App\Label::where('type', 'order')->get();
+        foreach($data['order_labels'] as $label)
+        {
+            $label->status = $whc->get_status($label->order_id);
+        }
         return view('labels')->with($data);
     }
 
@@ -366,13 +371,30 @@ class DPDController extends Controller
      *
      * @return Response
      */
-    public function index(Request $request)
+    public function view_all_orders(Request $request)
     {
-        Log::debug("Going to connect to BigCommerce");
         $orders = $this->get('orders');
         //Log::debug($orders);
         $data['orders'] = $orders;
         foreach ($orders as $order) {
+            $order_detail = $this->retrieve($order->id);
+            //Log::debug($order_detail);
+            $data['details'][$order->id] = $order_detail;
+        }
+        //Log::debug($data);
+        return view('all_orders')->with($data);
+    }
+
+    public function view_non_cancelled_orders(Request $request)
+    {
+        $orders = $this->get('orders');
+        //Log::debug($orders);
+        $data['orders'] = $orders;
+        foreach ($orders as $order) {
+            if ($order->status == 'Cancelled') {
+                continue;
+            }
+            $data['orders'][] = $order;
             $order_detail = $this->retrieve($order->id);
             //Log::debug($order_detail);
             $data['details'][$order->id] = $order_detail;

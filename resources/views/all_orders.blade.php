@@ -51,7 +51,7 @@
                             </tbody>
                         </table>
                         <hr>
-                        <h5><a href="{{url('/all_orders') }}">View All Orders (including Cancelled)</a></h5>
+                        <h5><a href="{{url('/orders') }}">View Only Non-Cancelled Orders</a></h5>
 					</div>
 					<!-- /.box-body -->
 				</div>
