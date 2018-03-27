@@ -62,7 +62,7 @@
                         @endif
 
                         <hr>
-                        <h5><a href='{{ url("/cull") }}'><i class='fa fa-calendar'></i><span>Delete Labels Created before {{Carbon::now()->subMonth()->format('Y-M-j')}}</span></a></h5>
+                        <h5><a href='{{ url("/cull") }}'><i class='fa fa-calendar'></i><span>Delete Labels Created before {{Carbon\Carbon::now()->subMonth()->format('Y-M-j')}}</span></a></h5>
 
 					</div>
 					<!-- /.box-body -->
