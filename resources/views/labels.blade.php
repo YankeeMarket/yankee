@@ -35,6 +35,10 @@
 					</div>
 					<div class="box-body">
                         @if($order_labels)
+                            @php
+                                Log::debug($status[100]);
+                                Log::debug($status[100]->value);
+                            @endphp
                             <h3>Order Labels</h3>
                             <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead>
