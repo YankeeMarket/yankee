@@ -133,7 +133,7 @@ class WebhookController extends Controller
     {
         $order = $this->get("orders/$order_id");
         Log::debug($order);
-        return optional($order->status);
+        return optional($order['status']);
     }
 
 }
