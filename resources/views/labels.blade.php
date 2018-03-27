@@ -64,7 +64,7 @@
                                             </td>
                                             <td>
                                                 <a href='{{url("delete/".$label->filename) }}'>
-                                                    <i class='fa fa-trash'></i> <span>Delete</span>
+                                                    <i class='fa fa-trash'></i> <span class="text-danger">Delete</span>
                                                 </a>
                                             </td>
                                         </tr>
