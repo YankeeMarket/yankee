@@ -420,7 +420,7 @@ class DPDController extends Controller
                 }
                 else
                 {
-                    $this->store_pdf($response, 'order', $pl_number, 'Label '.$data['pl_number'], $the_order);
+                    $this->store_pdf($response, 'order', $data['pl_number'], 'Label '.$data['pl_number'], $the_order);
 
                 }
             }
