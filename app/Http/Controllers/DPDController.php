@@ -132,16 +132,16 @@ class DPDController extends Controller
 
         $arguments['parcel_type'] = env('PARCEL_TYPE');
 
-        if ($shipping_address->phone || $shipping_address->email)
-        {
-            $arguments['predict'] = 'y';
-            $arguments['phone'] = $shipping_address->phone;
-            $arguments['email'] = $shipping_address->email;
-        }
-        else
-        {
+        //if ($shipping_address->phone || $shipping_address->email)
+        //{
+        //    $arguments['predict'] = 'y';
+        //    $arguments['phone'] = $shipping_address->phone;
+        //    $arguments['email'] = $shipping_address->email;
+        //}
+        //else
+        //{
             $arguments['predict'] = 'n';
-        }
+        //}
 
         $tstamp = Carbon::now();
 
