@@ -398,6 +398,8 @@ class DPDController extends Controller
                 $json['status'] == 'ok')
             {
                 $pl = $json['pl_number'][0];
+
+                Log::debug(substr($pl, 0, 80));
                 $data['pl_number'] = $pl;
             }
             if (array_key_exists('pl_number', $data))
