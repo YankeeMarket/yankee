@@ -219,6 +219,7 @@ class DPDController extends Controller
             $file = base64_decode(stream_get_contents($label->file));
             if (strlen($file) > 0)
             {
+                Log::debug("Successful retrieval of file from database for $order_id");
                 return $this->display_pdf($file, $pl_number);
             }
         }
