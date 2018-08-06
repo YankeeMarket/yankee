@@ -409,12 +409,12 @@ class DPDController extends Controller
 
                 //Log::debug($response);
 
-                if (json_decode($response, true))
+                if (json_decode($labelresponse, true))
                 {
-                    $data['error'] = $response;
+                    $data['error'] = $labelresponse;
                     //we have to report the error somehow
                 }
-                $start = substr($response, 0,21);
+                $start = substr($labelresponse, 0,21);
                 if ($start == '<!DOCTYPE HTML PUBLIC')
                 {
                     //hopefully this happens less now that we're in production
@@ -423,7 +423,7 @@ class DPDController extends Controller
                 }
                 else
                 {
-                    $this->store_pdf($response, 'order', $data['pl_number'], 'Label '.$data['pl_number'], $the_order);
+                    $this->store_pdf($labelresponse, 'order', $data['pl_number'], 'Label '.$data['pl_number'], $the_order);
 
                 }
             }
