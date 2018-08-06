@@ -248,7 +248,7 @@ class DPDController extends Controller
 
         $response = $this->request_label($pl_number);
 
-        //Log::debug($response);
+        Log::debug($response);
 
         if (json_decode($response, true))
         {
