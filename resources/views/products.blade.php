@@ -15,7 +15,7 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">BigCommerce Connection: {{$time}}</h3>
 					</div>
-                    @if(Auth::user->is_admin)
+                    @if(Auth::user()->is_admin)
     					<div class="box-body">
     						<ul>
     							@foreach($products as $product)

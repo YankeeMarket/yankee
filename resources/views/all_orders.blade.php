@@ -15,7 +15,7 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Yankee Market Orders</h3>
 					</div>
-                    @if(Auth::user->is_admin)
+                    @if(Auth::user()->is_admin)
     					<div class="box-body">
                             <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead>

@@ -15,7 +15,7 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Yankee Market Order {{$order_id}}</h3>
 					</div>
-                    @if(Auth::user->is_admin)
+                    @if(Auth::user()->is_admin)
     					<div class="box-body">
     						<?php
     						$order = $details[$order_id]['order'];

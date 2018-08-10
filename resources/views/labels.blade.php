@@ -26,7 +26,7 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Yankee Market Order Labels</h3>
 					</div>
-                    @if(Auth::user->is_admin)
+                    @if(Auth::user()->is_admin)
     					<div class="box-body">
                             @if($order_labels)
                                 <h3>Order Labels</h3>

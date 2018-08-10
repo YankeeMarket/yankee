@@ -34,7 +34,7 @@
             <li class="header">{{ trans('adminlte_lang::message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
             <li class="active"><a href="{{ url('home') }}"><i class='fa fa-link'></i> <span>{{ trans('adminlte_lang::message.home') }}</span></a></li>
-            @if(Auth::user->is_admin)
+            @if(Auth::user()->is_admin)
                 <li><a href="{{ url('products') }}"><i class='fa fa-shopping-bag'></i> <span>Products</span></a></li>
                 <li><a href="{{ url('orders') }}"><i class='fa fa-shopping-cart'></i> <span>Orders</span></a></li>
                 <li><a href="{{ url('close') }}"><i class='fa fa-clock-o'></i><i class='fa fa-close'></i> <span>Close Manifest</span></a></li>

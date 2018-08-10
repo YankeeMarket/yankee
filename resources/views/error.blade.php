@@ -10,7 +10,7 @@
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
 
-                @if(Auth::user->is_admin)
+                @if(Auth::user()->is_admin)
     				<!-- Default box -->
     				<div class="box box-solid box-danger">
     					<div class="box-header">
