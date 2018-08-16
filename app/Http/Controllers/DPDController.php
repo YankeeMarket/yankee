@@ -135,12 +135,12 @@ class DPDController extends Controller
         //if ($shipping_address->phone || $shipping_address->email)
         //{
         //    $arguments['predict'] = 'y';
-        //    $arguments['phone'] = $shipping_address->phone;
-        //    $arguments['email'] = $shipping_address->email;
+        $arguments['phone'] = $shipping_address->phone;
+        $arguments['email'] = $shipping_address->email;
         //}
         //else
         //{
-            $arguments['predict'] = 'n';
+        $arguments['predict'] = 'n';
         //}
 
         $tstamp = Carbon::now();
