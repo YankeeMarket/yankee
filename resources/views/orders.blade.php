@@ -35,9 +35,9 @@
                                             <tr>
                                                 <td><a href="{{ url('/create/'.$order->id) }}">{{$order->id}}</a></td>
                                                 <td>{{$order->status}}</td>
-                                                <!--<td>{{$details[$order->id]['addresses']->first()->first_name}}
-                                                    {{$details[$order->id]['addresses']->first()->last_name}}</td>
-                                                <td>{{$details[$order->id]['addresses']->first()->city}}</td> -->
+                                                <!--<td>$details[$order->id]['addresses']->first()->first_name}}
+                                                    $details[$order->id]['addresses']->first()->last_name}}</td>
+                                                <td>$details[$order->id]['addresses']->first()->city}}</td> -->
                                                 <td>{{$order->items_total}}</td>
                                                 <td>€ {{number_format($order->total_inc_tax, 2)}}</td>
                                                 <td>{{Carbon\Carbon::createFromFormat('D, d M Y H:i:s O', $order->date_created)->toDayDateTimeString()}}</td>
