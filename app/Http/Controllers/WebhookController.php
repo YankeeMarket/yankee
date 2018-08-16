@@ -48,6 +48,7 @@ class WebhookController extends Controller
      */
      public function view_all_orders(Request $request)
      {
+         set_time_limit(120);
          $orders = $this->get('orders');
          //Log::debug($orders);
          $data['orders'] = $orders;
@@ -62,6 +63,7 @@ class WebhookController extends Controller
 
      public function view_non_cancelled_orders(Request $request)
      {
+         set_time_limit(120);
          $orders = $this->get('orders');
          //Log::debug($orders);
          $data = [];
@@ -154,7 +156,7 @@ class WebhookController extends Controller
         {
             return $order['status'];
         }
-        else 
+        else
         {
             return null;
         }
