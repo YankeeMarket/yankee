@@ -53,9 +53,9 @@ class WebhookController extends Controller
          //Log::debug($orders);
          $data['orders'] = $orders;
          foreach ($orders as $order) {
-             $order_detail = $this->retrieve($order->id);
+             //$order_detail = $this->retrieve($order->id);
              //Log::debug($order_detail);
-             $data['details'][$order->id] = $order_detail;
+             //$data['details'][$order->id] = $order_detail;
          }
          //Log::debug($data);
          return view('all_orders')->with($data);
@@ -72,9 +72,9 @@ class WebhookController extends Controller
                  continue;
              }
              $data['orders'][] = $order;
-             $order_detail = $this->retrieve($order->id);
+             //$order_detail = $this->retrieve($order->id);
              //Log::debug($order_detail);
-             $data['details'][$order->id] = $order_detail;
+             //$data['details'][$order->id] = $order_detail;
          }
          //Log::debug($data);
          return view('orders')->with($data);
