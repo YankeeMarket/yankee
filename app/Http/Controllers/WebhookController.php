@@ -145,7 +145,18 @@ class WebhookController extends Controller
         $customer_id = $data['order']['customer_id'];
         $data['customer'] = $this->get("customers/$customer_id");
         $data['products'] = $this->get("orders/$order_id/products");
-        $data['addresses'] = $this->get("orders/$order_id/shippingaddresses");
+        //business rules can go here to fix zip codes
+        $addresses = $this->get("orders/$order_id/shippingaddresses");
+        Log::debug($addresses);
+        $shipping_address = $addresses->first();
+        $existing_zip = $shipping_address->zip;
+        $fixed_zip = preg_replace('/\D/', '', $existing_zip);
+        $shipping_address->zip = $fixed_zip;
+        $addresses->first()->zip = $fixed_zip;
+        
+        $data['addresses'] = $addresses;
+        Log::debug($data['addresses']);
+
         return $data;
     }
 
